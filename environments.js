@@ -9,11 +9,11 @@ const envirionments = {
     // openAiMaxTokens: Number(process.env.OPENAI_MAX_TOKENS),
     
     // //* pendiente
-    // mongoDBUser: process.env.MONGODB_USER,
-    // mongoDBPassword: process.env.MONGODB_PASSWORD,
-    // mongoDBHost: process.env.MONGODB_HOST,
+    mongoDBUser: process.env.MONGODB_USER,
+    mongoDBPassword: process.env.MONGODB_PASSWORD,
+    mongoDBHost: process.env.MONGODB_HOST,
     // mongoDBPort: process.env.MONGODB_PORT,
-    // mongoDBDatabase: process.env.MONGODB_DATABASE,
+    mongoDBDatabase: process.env.MONGODB_DATABASE,
     // mongoDBCollection: process.env.MONGODB_COLLECTION,
 }
 
