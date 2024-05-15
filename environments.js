@@ -5,8 +5,9 @@ const envirionments = {
     botToken: process.env.BOT_TOKEN,
    
     openAiSecret: process.env.OPENAI_SECRET,
-    // openAiTemperature: Number(process.env.OPENAI_TEMPERATURE),
-    // openAiMaxTokens: Number(process.env.OPENAI_MAX_TOKENS),
+    openAiModel: process.env.OPENAI_MODEL,
+    openAiTemperature: Number(process.env.OPENAI_TEMPERATURE),
+    openAiMaxTokens: Number(process.env.OPENAI_MAX_TOKENS),
     
     awsApiKey: process.env.AWS_API_KEY,
     awsApiSecret: process.env.AWS_API_SECRET,

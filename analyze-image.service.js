@@ -1,20 +1,16 @@
 const fs = require("fs");
-const os = require("os");
-const path = require("path");
 const fetch = require("node-fetch");
 const { randomUUID } = require("crypto");
 
-const { analyzeImage } = require('./openai.services');
+const { generateJSONFromReceipt } = require('./openai.services');
 const { saveReceiptInfo } = require("./mongodb");
 const { saveFileInRepository } = require("./aws.services");
 
 async function analyzeImageService(ctx) {
     try {
         const photo = ctx.message.photo[ctx.message.photo.length - 1];
+        const path = `./.temp/${photo.file_id}.jpg`;
 
-        const tempDir = os.tmpdir();
-        const pathFile = path.join(tempDir, `/${photo.file_id}.jpg`);
-        console.log(pathFile)
         const id = randomUUID();
         const filename = `${id}.jpg`;
 
@@ -24,15 +20,16 @@ async function analyzeImageService(ctx) {
 
         const res = await fetch(photoUrl);
         const fileStream = await res.buffer()
-        fs.writeFileSync(pathFile, fileStream);
+        fs.writeFileSync(path, fileStream);
 
         const {caption} = ctx.message
 
         let response = "No se ha reconocido el texto en la imagen";
 
-        const {success, data_in_text, ...rest} = await analyzeImage(pathFile, caption)
+        const {success, data_in_text, ...rest} = await generateJSONFromReceipt(path, caption)
 
-        const image_key = await saveFileInRepository(filename, pathFile);
+        const image_key = await saveFileInRepository(filename, path);
+
         receipt = {
             success,
             ...rest,
@@ -49,7 +46,17 @@ async function analyzeImageService(ctx) {
     } catch (error) {
         console.error({ error });
         ctx.reply("Ha ocurrido un error inesperado, por favor vuelve a intentar");
-    } 
+    } finally {
+        fs.readdir(".temp", (err, files) => {
+            if (err) throw err;
+
+            for (const file of files) {
+                fs.unlink(`.temp/${file}`, (err) => {
+                    if (err) throw err;
+                });
+            }
+        });
+    }
 
 }
 module.exports = {
