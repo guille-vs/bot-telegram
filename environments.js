@@ -8,7 +8,11 @@ const envirionments = {
     // openAiTemperature: Number(process.env.OPENAI_TEMPERATURE),
     // openAiMaxTokens: Number(process.env.OPENAI_MAX_TOKENS),
     
-    // //* pendiente
+    awsApiKey: process.env.AWS_API_KEY,
+    awsApiSecret: process.env.AWS_API_SECRET,
+    awsRegion: process.env.AWS_REGION,
+    awsBucket: process.env.AWS_BUCKET,
+
     mongoDBUser: process.env.MONGODB_USER,
     mongoDBPassword: process.env.MONGODB_PASSWORD,
     mongoDBHost: process.env.MONGODB_HOST,

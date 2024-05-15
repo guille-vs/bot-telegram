@@ -6,6 +6,7 @@ const { randomUUID } = require("crypto");
 
 const { analyzeImage } = require('./openai.services');
 const { saveReceiptInfo } = require("./mongodb");
+const { saveFileInRepository } = require("./aws.services");
 
 async function analyzeImageService(ctx) {
     try {
@@ -21,7 +22,6 @@ async function analyzeImageService(ctx) {
 
         const photoUrl = `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${file.file_path}`;
 
-        // crear la imagen en local, temporalmente
         const res = await fetch(photoUrl);
         const fileStream = await res.buffer()
         fs.writeFileSync(pathFile, fileStream);
@@ -32,11 +32,11 @@ async function analyzeImageService(ctx) {
 
         const {success, data_in_text, ...rest} = await analyzeImage(pathFile, caption)
 
-        //todo const image_key = await saveFileInRepository(filename, path);
+        const image_key = await saveFileInRepository(filename, pathFile);
         receipt = {
             success,
             ...rest,
-            image_key: 'image_key_123'
+            image_key
         }
 
 
